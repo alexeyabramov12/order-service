@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="insert_roles" author="Alexey_Abramov">
+        <insert tableName="role">
+            <column name="id" value="1"/>
+            <column name="name" value="Admin"/>
+            <column name="is_deleted" value="false"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" value="2"/>
+            <column name="name" value="User"/>
+            <column name="is_deleted" value="false"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_users" author="Alexey_Abramov">
+        <insert tableName="user">
+            <column name="id" value="1"/>
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Doe"/>
+            <column name="email" value="admin1@example.com"/>
+            <column name="password" value="admin1password"/>
+            <column name="is_deleted" value="false"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="2"/>
+            <column name="first_name" value="Jane"/>
+            <column name="last_name" value="Smith"/>
+            <column name="email" value="admin2@example.com"/>
+            <column name="password" value="admin2password"/>
+            <column name="is_deleted" value="false"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="3"/>
+            <column name="first_name" value="Alice"/>
+            <column name="last_name" value="Brown"/>
+            <column name="email" value="user1@example.com"/>
+            <column name="password" value="user1password"/>
+            <column name="is_deleted" value="false"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="4"/>
+            <column name="first_name" value="Bob"/>
+            <column name="last_name" value="Green"/>
+            <column name="email" value="user2@example.com"/>
+            <column name="password" value="user2password"/>
+            <column name="is_deleted" value="false"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="assign_roles_to_users" author="Alexey_Abramov">
+        <insert tableName="user_role">
+            <column name="id" value="1"/>
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="id" value="2"/>
+            <column name="user_id" value="2"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="id" value="3"/>
+            <column name="user_id" value="3"/>
+            <column name="role_id" value="2"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="id" value="4"/>
+            <column name="user_id" value="4"/>
+            <column name="role_id" value="2"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
