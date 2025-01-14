@@ -27,3 +27,7 @@ spring:
     liquibase-schema: public
     default-schema: order-service-schema
     drop-first: false
+
+jwt:
+  secret: jwtorderserviceapp
+  expiration: 3600000
