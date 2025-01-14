@@ -10,24 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Контроллер для аутентификации пользователей.
- */
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * Эндпоинт для выполнения входа.
-     *
-     * @param authenticateDto DTO с данными аутентификации
-     * @return JWT токен, если вход успешен
-     */
     @PostMapping("/login")
     public ResponseEntity<AuthenticateResponseDto> login(@Valid @RequestBody AuthenticateDto authenticateDto) {
         return ResponseEntity.ok(authService.login(authenticateDto));
     }
 }
-
