@@ -24,7 +24,7 @@
             <column name="first_name" value="John"/>
             <column name="last_name" value="Doe"/>
             <column name="email" value="admin1@example.com"/>
-            <column name="password" value="admin1password"/>
+            <column name="password" value="$2a$10$pnT8zRkgQKhqK46FyqIEa.Wnq8m6di2Nf/L14AVs2KG6sHraodwZO"/>
             <column name="is_deleted" value="false"/>
         </insert>
         <insert tableName="user">
@@ -32,7 +32,7 @@
             <column name="first_name" value="Jane"/>
             <column name="last_name" value="Smith"/>
             <column name="email" value="admin2@example.com"/>
-            <column name="password" value="admin2password"/>
+            <column name="password" value="$2a$10$pnT8zRkgQKhqK46FyqIEa.Wnq8m6di2Nf/L14AVs2KG6sHraodwZO"/>
             <column name="is_deleted" value="false"/>
         </insert>
         <insert tableName="user">
@@ -40,7 +40,7 @@
             <column name="first_name" value="Alice"/>
             <column name="last_name" value="Brown"/>
             <column name="email" value="user1@example.com"/>
-            <column name="password" value="user1password"/>
+            <column name="password" value="$2a$10$pnT8zRkgQKhqK46FyqIEa.Wnq8m6di2Nf/L14AVs2KG6sHraodwZO"/>
             <column name="is_deleted" value="false"/>
         </insert>
         <insert tableName="user">
@@ -48,7 +48,7 @@
             <column name="first_name" value="Bob"/>
             <column name="last_name" value="Green"/>
             <column name="email" value="user2@example.com"/>
-            <column name="password" value="user2password"/>
+            <column name="password" value="$2a$10$pnT8zRkgQKhqK46FyqIEa.Wnq8m6di2Nf/L14AVs2KG6sHraodwZO"/>
             <column name="is_deleted" value="false"/>
         </insert>
     </changeSet>

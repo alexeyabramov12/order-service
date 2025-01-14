@@ -9,9 +9,10 @@ import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-@MappedSuperclass
+
 @Getter
 @Setter
+@MappedSuperclass
 public class BaseEntity {
 
     @Id

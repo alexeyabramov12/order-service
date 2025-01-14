@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "role")
+@Table(name = "role", schema = "app_schema")
 public class Role extends BaseEntity {
 
     @Column(name = "name")

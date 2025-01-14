@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "user", schema = "app_schema")
 public class User extends BaseEntity {
 
     @Column(name = "first_name")

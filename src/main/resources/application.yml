@@ -8,7 +8,7 @@ spring:
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     hikari:
-      schema: order-service-schema
+      schema: app_schema
 
   jpa:
     properties:
@@ -25,9 +25,14 @@ spring:
     change-log: classpath:/db/changelog/changelog-master.xml
     contexts: dev
     liquibase-schema: public
-    default-schema: order-service-schema
+    default-schema: app_schema
     drop-first: false
 
 jwt:
-  secret: jwtorderserviceapp
-  expiration: 3600000
+  # The secret key used to sign the JWT. Ensure this is long enough (at least 32 characters)
+  # and kept secure. Do not expose it publicly.
+  secret: "verysecureandlongsecretkeyforjwtorderserviceapp"
+
+  # The token expiration time in seconds.
+  # In this case, 3600 seconds equals 1 hour (60 minutes * 60 seconds).
+  expiration: 3600

@@ -60,7 +60,7 @@
         <createSequence
                 catalogName="sequence"
                 incrementBy="1"
-                schemaName="public"
+                schemaName="app_schema"
                 sequenceName="sequence"
                 startValue="1"/>
     </changeSet>
