@@ -1,5 +1,6 @@
 package com.example.orderservice.presentation.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "User not found");
+        errorResponse.put("details", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles {@link EntityNotFoundException} when an entity is not found in the database.
+     *
+     * @param ex the exception thrown
+     * @return a {@link ResponseEntity} with error message and {@link HttpStatus#NOT_FOUND}
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Entity not found");
         errorResponse.put("details", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -63,6 +79,20 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles {@link MethodArgumentTypeMismatchException} when a request parameter cannot be converted to the expected type.
+     *
+     * @param ex the exception thrown
+     * @return a {@link ResponseEntity} with error message and {@link HttpStatus#BAD_REQUEST}
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, String>> handleTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Invalid parameter");
+        errorResponse.put("details", String.format("Parameter '%s' is invalid.", ex.getName()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * Handles generic exceptions that are not specifically handled by other methods.
      *
      * @param ex the exception thrown
@@ -76,4 +106,3 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
-

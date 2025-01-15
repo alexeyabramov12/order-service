@@ -28,6 +28,12 @@ spring:
     default-schema: app_schema
     drop-first: false
 
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.hibernate: INFO
+
 jwt:
   # The secret key used to sign the JWT. Ensure this is long enough (at least 32 characters)
   # and kept secure. Do not expose it publicly.

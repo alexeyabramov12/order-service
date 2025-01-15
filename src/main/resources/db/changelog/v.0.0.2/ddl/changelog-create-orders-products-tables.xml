@@ -16,7 +16,7 @@
             <column name="status" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="total_price" type="DECIMAL(19, 2)">
+            <column name="total_price" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
             <column name="is_deleted" type="BOOLEAN" defaultValue="false">
@@ -40,7 +40,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="order_id" type="BIGINT">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="is_deleted" type="BOOLEAN" defaultValue="false">
                 <constraints nullable="false"/>

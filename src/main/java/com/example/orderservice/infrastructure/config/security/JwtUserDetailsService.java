@@ -43,8 +43,6 @@ public class JwtUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.info("Attempting to load user by email: {}", email);
-
         // Fetch user from the repository
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> {

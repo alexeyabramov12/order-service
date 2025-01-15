@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -22,6 +23,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder encoder;
 
+    @Override
+    @Transactional(readOnly = true)
     public AuthenticateResponseDto login(AuthenticateDto authenticateDto) {
 
         final User user = userRepository.findByEmail(authenticateDto.getEmail()).
