@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Security configuration class for the application.
  * <p>
- * This class sets up the security policies and components required for authentication
+ * This class configures the security policies and components required for authentication
  * and authorization, including JWT-based authentication, role-based access control,
  * and stateless session management.
  */
@@ -34,16 +34,17 @@ public class SecurityConfig {
     /**
      * Configures the security filter chain for the application.
      * <p>
-     * This method:
+     * This method performs the following tasks:
      * <ul>
-     *     <li>Disables CSRF (as the application uses stateless authentication).</li>
-     *     <li>Defines access control policies based on roles and endpoints.</li>
-     *     <li>Adds a custom {@link JwtAuthenticationFilter} before the {@link UsernamePasswordAuthenticationFilter}.</li>
-     *     <li>Enforces stateless session management.</li>
+     *     <li>Disables CSRF protection since the application uses stateless authentication.</li>
+     *     <li>Defines access control policies for various endpoints based on user roles.</li>
+     *     <li>Adds a custom {@link JwtAuthenticationFilter} before the {@link UsernamePasswordAuthenticationFilter}
+     *         to handle JWT validation and authentication.</li>
+     *     <li>Enforces stateless session management by disabling session creation.</li>
      * </ul>
      *
-     * @param http the {@link HttpSecurity} object to configure security settings
-     * @return a fully configured {@link SecurityFilterChain} bean
+     * @param http the {@link HttpSecurity} object used to configure security settings
+     * @return a configured {@link SecurityFilterChain} bean
      * @throws Exception if an error occurs during configuration
      */
     @Bean
@@ -52,9 +53,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/orders").hasAnyRole("User", "Admin")
+                        .requestMatchers("/orders/**").hasAnyRole("User", "Admin")
                         .anyRequest().authenticated()
                 )
+                // Add the custom JWT authentication filter before the UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // Configure the application to use stateless session management
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -62,14 +67,14 @@ public class SecurityConfig {
     }
 
     /**
-     * Exposes the {@link AuthenticationManager} as a bean for use in authentication processes.
+     * Exposes the {@link AuthenticationManager} as a Spring bean.
      * <p>
      * The {@link AuthenticationManager} is automatically configured using the application's
-     * security configuration (e.g., user details, password encoder).
+     * security configuration, including the user details service and password encoder.
      *
      * @param configuration the {@link AuthenticationConfiguration} provided by Spring Security
      * @return a fully configured {@link AuthenticationManager} bean
-     * @throws Exception if an error occurs during configuration
+     * @throws Exception if an error occurs while building the {@link AuthenticationManager}
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -77,12 +82,12 @@ public class SecurityConfig {
     }
 
     /**
-     * Configures a password encoder bean for hashing passwords.
+     * Configures a password encoder bean for hashing and verifying passwords.
      * <p>
-     * The {@link BCryptPasswordEncoder} is a strong password hashing algorithm and
-     * is recommended for modern applications.
+     * This method provides a {@link BCryptPasswordEncoder}, which is a strong password hashing algorithm
+     * recommended for modern applications.
      *
-     * @return a {@link PasswordEncoder} bean
+     * @return a {@link PasswordEncoder} bean used for password hashing
      */
     @Bean
     public PasswordEncoder passwordEncoder() {

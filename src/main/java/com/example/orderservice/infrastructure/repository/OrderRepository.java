@@ -42,4 +42,26 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      */
     @Query("SELECT o FROM Order o WHERE o.id = :id AND o.isDeleted = false")
     Optional<Order> findByIdAndNotDeleted(Long id);
+
+    /**
+     * Finds a list of orders for a specific customer based on the specified filters.
+     * The filters include customer name, order status, minimum price, and maximum price.
+     * Orders marked as deleted are excluded from the results.
+     *
+     * @param customerName the name of the customer whose orders are to be retrieved.
+     * @param status       the status of the orders to filter by (e.g., PENDING, CONFIRMED, CANCELLED).
+     *                     If {@code null}, the filter is ignored.
+     * @param minPrice     the minimum total price of the orders to filter by.
+     *                     If {@code null}, the filter is ignored.
+     * @param maxPrice     the maximum total price of the orders to filter by.
+     *                     If {@code null}, the filter is ignored.
+     * @return a list of orders matching the specified filters, associated with the given customer, excluding deleted orders.
+     */
+    @Query("SELECT o FROM Order o WHERE " +
+            "(o.customerName = :customerName) AND " +
+            "(o.status = :status OR :status IS NULL) AND " +
+            "(o.totalPrice >= :minPrice OR :minPrice IS NULL) AND " +
+            "(o.totalPrice <= :maxPrice OR :maxPrice IS NULL) AND " +
+            "o.isDeleted = false")
+    List<Order> findOrdersByFiltersForUser(String customerName, OrderStatus status, Double minPrice, Double maxPrice);
 }

@@ -40,14 +40,14 @@ public class JwtUserFactory {
      * Maps a list of {@link Role} entities to a list of {@link GrantedAuthority}.
      * <p>
      * This method converts each {@link Role} name into a {@link SimpleGrantedAuthority},
-     * which is used by Spring Security to manage roles and permissions.
+     * adding the `ROLE_` prefix to ensure compatibility with Spring Security role checks.
      *
      * @param userRoles the list of {@link Role} entities
      * @return a list of {@link GrantedAuthority} corresponding to the user roles
      */
     private List<GrantedAuthority> mapToGrantedAuthorities(List<Role> userRoles) {
         return userRoles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(Collectors.toList());
     }
 }

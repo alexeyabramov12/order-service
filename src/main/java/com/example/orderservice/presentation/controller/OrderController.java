@@ -4,6 +4,7 @@ import com.example.orderservice.application.service.OrderService;
 import com.example.orderservice.domain.order.OrderStatus;
 import com.example.orderservice.presentation.dto.order.OrderRequestDto;
 import com.example.orderservice.presentation.dto.order.OrderResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,14 +27,14 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto orderRequest) {
+    public ResponseEntity<OrderResponseDto> createOrder(@Valid @RequestBody OrderRequestDto orderRequest) {
         OrderResponseDto createdOrder = orderService.createOrder(orderRequest);
         return ResponseEntity.ok(createdOrder);
     }
 
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(@PathVariable Long orderId,
-                                                        @RequestBody OrderRequestDto orderRequest) {
+                                                        @Valid @RequestBody OrderRequestDto orderRequest) {
         OrderResponseDto updatedOrder = orderService.updateOrder(orderId, orderRequest);
         return ResponseEntity.ok(updatedOrder);
     }
