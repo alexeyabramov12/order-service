@@ -28,6 +28,9 @@ spring:
     default-schema: app_schema
     drop-first: false
 
+  cache:
+    type: simple
+
 logging:
   level:
     root: INFO
