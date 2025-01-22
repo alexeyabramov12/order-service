@@ -3,6 +3,7 @@ package com.example.orderservice.application.service.impl;
 import com.example.orderservice.application.service.OrderService;
 import com.example.orderservice.domain.order.Order;
 import com.example.orderservice.domain.order.OrderStatus;
+import com.example.orderservice.infrastructure.audit.anatation.Auditable;
 import com.example.orderservice.infrastructure.config.security.UserContextHelper;
 import com.example.orderservice.infrastructure.mapper.OrderMapper;
 import com.example.orderservice.infrastructure.repository.OrderRepository;
@@ -28,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    @Auditable(action = "Create order")
     @CacheEvict(value = "orders", allEntries = true)
     public OrderResponseDto createOrder(OrderRequestDto orderRequest) {
         return mapper.toDto(repository.save(mapper.toEntity(orderRequest)));
@@ -35,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    @Auditable(action = "Update order")
     @CachePut(value = "orders", key = "#orderId")
     public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequest) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
@@ -52,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Auditable(action = "Get order by id")
     @Transactional(readOnly = true)
     @Cacheable(value = "orders", key = "#orderId")
     public OrderResponseDto getOrderById(Long orderId) {
@@ -66,6 +70,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
+    @Auditable(action = "Get orders")
     @Cacheable(
             value = "orders",
             key = "T(String).format('%s-%s-%s-%s-%s', " +
@@ -91,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    @Auditable(action = "Delete order")
     @CacheEvict(value = "orders", key = "#orderId")
     public void deleteOrder(Long orderId) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
