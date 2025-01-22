@@ -3,6 +3,7 @@ package com.example.orderservice.infrastructure.repository;
 import com.example.orderservice.domain.order.Order;
 import com.example.orderservice.domain.order.OrderStatus;
 import jakarta.transaction.Transactional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,8 @@ class OrderRepositoryTest {
 
     private Order activeOrder;
     private Order deletedOrder;
+    private final SoftAssertions softly = new SoftAssertions();
+
 
     @BeforeEach
     void init() {
@@ -66,11 +69,11 @@ class OrderRepositoryTest {
     void findOrdersByFilters_ValidFilters_ReturnsActiveOrders() {
         List<Order> result = repository.findOrdersByFilters(OrderStatus.PENDING, null, null);
 
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getCustomerName()).isEqualTo("John Doe");
-        assertThat(result.get(0).getStatus()).isEqualTo(OrderStatus.PENDING);
-        assertThat(result.get(0).getTotalPrice()).isEqualTo(100.0);
+        softly.assertThat(result).isNotNull();
+        softly.assertThat(result.size()).isEqualTo(1);
+        softly.assertThat(result.getFirst().getCustomerName()).isEqualTo("John Doe");
+        softly.assertThat(result.getFirst().getStatus()).isEqualTo(OrderStatus.PENDING);
+        softly.assertThat(result.getFirst().getTotalPrice()).isEqualTo(100.0);
     }
 
     @Test
@@ -78,9 +81,9 @@ class OrderRepositoryTest {
     void findOrdersByFilters_DeletedOrdersExcluded_ReturnsOnlyActiveOrders() {
         List<Order> result = repository.findOrdersByFilters(null, null, null);
 
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getCustomerName()).isEqualTo("John Doe");
+        softly.assertThat(result).isNotNull();
+        softly.assertThat(result.size()).isEqualTo(1);
+        softly.assertThat(result.getFirst().getCustomerName()).isEqualTo("John Doe");
     }
 
     @Test
@@ -88,9 +91,9 @@ class OrderRepositoryTest {
     void findOrdersByFiltersForUser_ValidFilters_ReturnsCustomerOrders() {
         List<Order> result = repository.findOrdersByFiltersForUser("John Doe", null, null, null);
 
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getCustomerName()).isEqualTo("John Doe");
+        softly.assertThat(result).isNotNull();
+        softly.assertThat(result.size()).isEqualTo(1);
+        softly.assertThat(result.getFirst().getCustomerName()).isEqualTo("John Doe");
     }
 
     @Test
@@ -98,9 +101,9 @@ class OrderRepositoryTest {
     void findByIdAndNotDeleted_ActiveOrder_ReturnsOrder() {
         Optional<Order> result = repository.findByIdAndNotDeleted(activeOrder.getId());
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getCustomerName()).isEqualTo("John Doe");
-        assertThat(result.get().getStatus()).isEqualTo(OrderStatus.PENDING);
+        softly. assertThat(result).isPresent();
+        softly.assertThat(result.get().getCustomerName()).isEqualTo("John Doe");
+        softly. assertThat(result.get().getStatus()).isEqualTo(OrderStatus.PENDING);
     }
 
     @Test

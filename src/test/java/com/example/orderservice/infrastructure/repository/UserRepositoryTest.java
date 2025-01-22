@@ -1,6 +1,7 @@
 package com.example.orderservice.infrastructure.repository;
 
 import com.example.orderservice.domain.auth.User;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
 
+    private final SoftAssertions softly = new SoftAssertions();
+
     @DynamicPropertySource
     static void postgresqlProperties(DynamicPropertyRegistry registry) {
         configurePostgres(registry);
@@ -34,10 +37,10 @@ class UserRepositoryTest {
     void findByEmail_PreloadedUserExists_ReturnsUser() {
         Optional<User> result = userRepository.findByEmail("admin1@example.com");
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getFirstName()).isEqualTo("John");
-        assertThat(result.get().getLastName()).isEqualTo("Doe");
-        assertThat(result.get().getRoles()).isNotEmpty();
+        softly.assertThat(result).isPresent();
+        softly.assertThat(result.get().getFirstName()).isEqualTo("John");
+        softly.assertThat(result.get().getLastName()).isEqualTo("Doe");
+        softly.assertThat(result.get().getRoles()).isNotEmpty();
     }
 
     @Test
@@ -45,9 +48,9 @@ class UserRepositoryTest {
     void findAll_PreloadedUsersExist_ReturnsAllUsers() {
         List<User> users = userRepository.findAll();
 
-        assertThat(users).isNotNull();
-        assertThat(users.size()).isEqualTo(4); // Based on your changelog
-        assertThat(users)
+        softly. assertThat(users).isNotNull();
+        softly. assertThat(users.size()).isEqualTo(4); // Based on your changelog
+        softly.assertThat(users)
                 .extracting("email")
                 .containsExactlyInAnyOrder(
                         "admin1@example.com",
@@ -69,10 +72,10 @@ class UserRepositoryTest {
     void findByEmail_UserWithRoles_ReturnsUserWithRoles() {
         Optional<User> result = userRepository.findByEmail("user1@example.com");
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getFirstName()).isEqualTo("Alice");
-        assertThat(result.get().getRoles()).isNotEmpty();
-        assertThat(result.get().getRoles().get(0).getName()).isEqualTo("User");
+        softly.assertThat(result).isPresent();
+        softly.assertThat(result.get().getFirstName()).isEqualTo("Alice");
+        softly.assertThat(result.get().getRoles()).isNotEmpty();
+        softly.assertThat(result.get().getRoles().get(0).getName()).isEqualTo("User");
     }
 
     @Test
