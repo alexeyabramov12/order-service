@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Auditable(action = "Get order by id")
-    @Transactional(readOnly = true)
+    @Transactional
     @Cacheable(value = "orders", key = "#orderId")
     public OrderResponseDto getOrderById(Long orderId) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     @Auditable(action = "Get orders")
     @Cacheable(
             value = "orders",
