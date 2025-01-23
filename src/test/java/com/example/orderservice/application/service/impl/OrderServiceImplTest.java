@@ -1,5 +1,6 @@
 package com.example.orderservice.application.service.impl;
 
+import com.example.orderservice.application.event.OrderStatusChangedEvent;
 import com.example.orderservice.domain.order.Order;
 import com.example.orderservice.domain.order.OrderStatus;
 import com.example.orderservice.infrastructure.config.security.UserContextHelper;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +44,9 @@ class OrderServiceImplTest {
 
     @Mock
     private UserContextHelper userContextHelper;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -184,5 +189,23 @@ class OrderServiceImplTest {
                 orderService.deleteOrder(1L));
 
         verify(repository, never()).save(any(Order.class));
+    }
+
+    @Test
+    @DisplayName("Should publish OrderStatusChangedEvent when order status is updated")
+    void updateOrder_ValidRequest_PublishesOrderStatusChangedEvent() {
+        when(userContextHelper.getCurrentUserEmail()).thenReturn("user@example.com");
+        when(repository.findByIdAndNotDeleted(eq(1L))).thenReturn(Optional.of(mockOrder));
+
+        Order updatedOrder = new Order();
+        updatedOrder.setId(1L);
+        updatedOrder.setCustomerName("user@example.com");
+        updatedOrder.setStatus(OrderStatus.CONFIRMED);
+        when(mapper.toEntity(any(OrderRequestDto.class))).thenReturn(updatedOrder);
+        when(repository.save(any(Order.class))).thenReturn(updatedOrder);
+
+        orderService.updateOrder(1L, mockOrderRequestDto);
+
+        verify(eventPublisher).publishEvent(any(OrderStatusChangedEvent.class));
     }
 }

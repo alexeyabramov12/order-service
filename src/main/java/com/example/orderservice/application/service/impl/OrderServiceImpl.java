@@ -1,5 +1,6 @@
 package com.example.orderservice.application.service.impl;
 
+import com.example.orderservice.application.event.OrderStatusChangedEvent;
 import com.example.orderservice.application.service.OrderService;
 import com.example.orderservice.domain.order.Order;
 import com.example.orderservice.domain.order.OrderStatus;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository repository;
     private final OrderMapper mapper;
     private final UserContextHelper userContextHelper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -51,6 +54,18 @@ public class OrderServiceImpl implements OrderService {
         updatedOrder.setId(existingOrder.getId());
 
         Order savedOrder = repository.save(updatedOrder);
+
+        // Publish event after saving
+        // In the future, this event can be sent to a message broker (e.g., Kafka, RabbitMQ)
+        // to notify other services or components about the order status change.
+        if (!existingOrder.getStatus().equals(savedOrder.getStatus())) {
+            eventPublisher.publishEvent(new OrderStatusChangedEvent(
+                    orderId,
+                    existingOrder.getStatus(),
+                    savedOrder.getStatus()
+            ));
+        }
+
         return mapper.toDto(savedOrder);
     }
 
