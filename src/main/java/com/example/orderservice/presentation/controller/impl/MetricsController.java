@@ -1,23 +1,21 @@
-package com.example.orderservice.presentation.controller;
+package com.example.orderservice.presentation.controller.impl;
 
+import com.example.orderservice.presentation.controller.MetricsControllerApi;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class MetricsController {
+@RequiredArgsConstructor
+public class MetricsController implements MetricsControllerApi {
 
     private final MeterRegistry meterRegistry;
 
-    public MetricsController(MeterRegistry meterRegistry) {
-        this.meterRegistry = meterRegistry;
-    }
-
-    @GetMapping("/metrics")
+    @Override
     public ResponseEntity<Map<String, Object>> getCustomMetrics() {
         Map<String, Object> metrics = new HashMap<>();
 

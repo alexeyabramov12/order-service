@@ -1,6 +1,7 @@
 package com.example.orderservice.presentation.dto.order;
 
 import com.example.orderservice.presentation.dto.product.ProductRequestDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,42 +14,34 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * DTO for creating or updating an order.
- * Contains validation constraints to ensure valid input data.
- */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "DTO for creating or updating an order")
 public class OrderRequestDto {
 
-    /**
-     * The customer's email address.
-     * Must be a valid email format and not blank.
-     */
+    @Schema(description = "The customer's email address",
+            example = "customer@example.com",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Customer name must not be blank")
     @Email(message = "Customer name must be a valid email")
     private String customerName;
 
-    /**
-     * The status of the order.
-     * Must not be blank.
-     */
+    @Schema(description = "The status of the order",
+            example = "PENDING",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Status must not be blank")
     private String status;
 
-    /**
-     * The total price of the order.
-     * Must not be null and must be a positive value.
-     */
+    @Schema(description = "The total price of the order",
+            example = "199.99",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "Total price must not be null")
     private BigDecimal totalPrice;
 
-    /**
-     * The list of products in the order.
-     * Must contain at least one product.
-     */
+    @Schema(description = "The list of products in the order",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "Products list must not be null")
     @Size(min = 1, message = "Order must contain at least one product")
     private List<ProductRequestDto> products;

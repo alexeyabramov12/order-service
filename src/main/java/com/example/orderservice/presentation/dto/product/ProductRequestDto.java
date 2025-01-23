@@ -1,5 +1,6 @@
 package com.example.orderservice.presentation.dto.product;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,35 +9,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * DTO for creating or updating a product in an order.
- * Contains validation constraints to ensure valid input data.
- */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "DTO for representing a product in an order request")
 public class ProductRequestDto {
 
-    /**
-     * The name of the product.
-     * Must not be blank.
-     */
+    @Schema(description = "The name of the product",
+            example = "Laptop",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Product name must not be blank")
     private String name;
 
-    /**
-     * The price of the product.
-     * Must not be null and must be greater than or equal to 0.01.
-     */
+    @Schema(description = "The price of the product",
+            example = "899.99",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "Product price must not be null")
     @Min(value = 0, message = "Product price must be at least 0")
     private Double price;
 
-    /**
-     * The quantity of the product.
-     * Must not be null and must be greater than or equal to 1.
-     */
+    @Schema(description = "The quantity of the product",
+            example = "2",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "Product quantity must not be null")
     @Min(value = 1, message = "Product quantity must be at least 1")
     private Integer quantity;

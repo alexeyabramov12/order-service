@@ -25,14 +25,14 @@ public class GlobalExceptionHandler {
      * Handles {@link UsernameNotFoundException} when a user is not found in the system.
      *
      * @param ex the exception thrown
-     * @return a {@link ResponseEntity} with error message and {@link HttpStatus#NOT_FOUND}
+     * @return a {@link ResponseEntity} with error message and {@link HttpStatus#UNAUTHORIZED}
      */
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "User not found");
         errorResponse.put("details", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     /**
