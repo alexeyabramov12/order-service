@@ -112,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     @Auditable(action = "Delete order")
-    @CacheEvict(value = "orders", key = "#orderId")
+    @CacheEvict(value = "orders", allEntries = true)
     public void deleteOrder(Long orderId) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
         Order order = repository.findByIdAndNotDeleted(orderId)
