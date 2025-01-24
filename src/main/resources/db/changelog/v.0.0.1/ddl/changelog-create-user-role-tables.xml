@@ -55,13 +55,4 @@
             </column>
         </createTable>
     </changeSet>
-
-    <changeSet id="create_sequence" author="Alexey_Abramov">
-        <createSequence
-                catalogName="sequence"
-                incrementBy="1"
-                schemaName="app_schema"
-                sequenceName="sequence"
-                startValue="1"/>
-    </changeSet>
 </databaseChangeLog>
