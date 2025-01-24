@@ -32,6 +32,10 @@ Manage orders:
 - **GET** `/orders` - Get a list of orders with optional filters
 - **POST** `/orders` - Create a new order
 
+### Auditing
+- User actions related to orders are audited and saved in the database.
+- Audit logs are stored in the `audit` table.
+
 ---
 
 ## Running the Application
@@ -70,16 +74,16 @@ The application includes preloaded users and roles for testing purposes.
 
 ### Preloaded Users:
 
-| ID  | First Name | Last Name | Email                | Role   | Password   |
-|-----|------------|-----------|----------------------|--------|------------|
-| 1   | John       | Doe       | admin1@example.com   | Admin  | `password` |
-| 2   | Jane       | Smith     | admin2@example.com   | Admin  | `password` |
-| 3   | Alice      | Brown     | user1@example.com    | User   | `password` |
-| 4   | Bob        | Green     | user2@example.com    | User   | `password` |
+| ID  | First Name | Last Name | Email                | Role   | Password      |
+|-----|------------|-----------|----------------------|--------|---------------|
+| 1   | John       | Doe       | admin1@example.com   | Admin  | `password123` |
+| 2   | Jane       | Smith     | admin2@example.com   | Admin  | `password123` |
+| 3   | Alice      | Brown     | user1@example.com    | User   | `password123` |
+| 4   | Bob        | Green     | user2@example.com    | User   | `password123` |
 
 ### Notes:
 - Passwords are stored in hashed format in the database.
-- The plaintext password for all preloaded users is `password`.
+- The plaintext password for all preloaded users is `password123`.
 - Users with the **Admin** role have full access to all API endpoints.
 - Users with the **User** role have limited access to resources.
 
