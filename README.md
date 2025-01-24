@@ -40,27 +40,9 @@ Manage orders:
 
 ## Running the Application
 
-Follow these steps to set up and run the application using Docker.
+Run the application using Docker.
 
-### For **Windows**
-
-#### In PowerShell:
-```powershell
-$env:DOCKER_BUILDKIT=1
-docker-compose up --build -d
-```
-
-#### In cmd:
-```cmd
-set DOCKER_BUILDKIT=1
-docker-compose up --build -d
-```
-
-### For **macOS and Linux**
-
-#### In Terminal:
-```bash
-export DOCKER_BUILDKIT=1
+```docker
 docker-compose up --build -d
 ```
 
@@ -90,5 +72,6 @@ The application includes preloaded users and roles for testing purposes.
 ### Stopping the Application
 
 To stop the running application and remove all containers:
-```
+```docker
 docker-compose down
+```
