@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Auditable(action = "Get order by id")
     @Transactional
-    @Cacheable(value = "orders", key = "#orderId")
+    @CacheEvict(value = "orders", allEntries = true)
     public OrderResponseDto getOrderById(Long orderId) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
         Order order = repository.findByIdAndNotDeleted(orderId)
