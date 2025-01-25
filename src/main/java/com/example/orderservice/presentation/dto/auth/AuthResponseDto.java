@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "DTO for the authentication response containing the JWT token")
-public class AuthenticateResponseDto {
+public class AuthResponseDto {
 
     @Schema(description = "The JWT token issued upon successful authentication",
             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")

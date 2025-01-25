@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "DTO for user authentication requests")
-public class AuthenticateDto {
+public class AuthDto {
 
     @Schema(description = "The email of the user attempting to authenticate",
             example = "user@example.com",

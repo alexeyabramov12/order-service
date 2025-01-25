@@ -1,4 +1,4 @@
-package com.example.orderservice.infrastructure.audit.anatation;
+package com.example.orderservice.infrastructure.audit.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -3,8 +3,8 @@ package com.example.orderservice.application.service.impl;
 import com.example.orderservice.domain.auth.User;
 import com.example.orderservice.infrastructure.config.security.JwtUtil;
 import com.example.orderservice.infrastructure.repository.UserRepository;
-import com.example.orderservice.presentation.dto.auth.AuthenticateDto;
-import com.example.orderservice.presentation.dto.auth.AuthenticateResponseDto;
+import com.example.orderservice.presentation.dto.auth.AuthDto;
+import com.example.orderservice.presentation.dto.auth.AuthResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,14 +39,14 @@ class AuthServiceImplTest {
     @InjectMocks
     private AuthServiceImpl authService;
 
-    private AuthenticateDto validAuthenticateDto;
-    private AuthenticateDto invalidPasswordAuthenticateDto;
+    private AuthDto validAuthDto;
+    private AuthDto invalidPasswordAuthDto;
     private User validUser;
 
     @BeforeEach
     void setUp() {
-        validAuthenticateDto = new AuthenticateDto("user@example.com", "password123");
-        invalidPasswordAuthenticateDto = new AuthenticateDto("user@example.com", "wrongpassword");
+        validAuthDto = new AuthDto("user@example.com", "password123");
+        invalidPasswordAuthDto = new AuthDto("user@example.com", "wrongpassword");
 
         validUser = new User();
         validUser.setEmail("user@example.com");
@@ -56,32 +56,32 @@ class AuthServiceImplTest {
     @Test
     @DisplayName("Should return a token when credentials are valid")
     void login_ValidCredentials_ReturnsToken() {
-        when(userRepository.findByEmail(validAuthenticateDto.getEmail())).thenReturn(java.util.Optional.of(validUser));
-        when(encoder.matches(validAuthenticateDto.getPassword(), validUser.getPassword())).thenReturn(true);
+        when(userRepository.findByEmail(validAuthDto.getEmail())).thenReturn(java.util.Optional.of(validUser));
+        when(encoder.matches(validAuthDto.getPassword(), validUser.getPassword())).thenReturn(true);
         when(jwtUtil.generateToken(validUser)).thenReturn("mocked-jwt-token");
 
-        AuthenticateResponseDto response = authService.login(validAuthenticateDto);
+        AuthResponseDto response = authService.login(validAuthDto);
 
         assertNotNull(response);
         assertEquals("mocked-jwt-token", response.getToken());
-        verify(userRepository, times(1)).findByEmail(validAuthenticateDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(validAuthDto.getEmail());
         verify(encoder, times(1))
-                .matches(validAuthenticateDto.getPassword(), validUser.getPassword());
+                .matches(validAuthDto.getPassword(), validUser.getPassword());
         verify(jwtUtil, times(1)).generateToken(validUser);
     }
 
     @Test
     @DisplayName("Should throw UsernameNotFoundException when user is not found")
     void login_UserNotFound_ThrowsException() {
-        when(userRepository.findByEmail(validAuthenticateDto.getEmail())).thenReturn(java.util.Optional.empty());
+        when(userRepository.findByEmail(validAuthDto.getEmail())).thenReturn(java.util.Optional.empty());
 
         UsernameNotFoundException exception = assertThrows(
                 UsernameNotFoundException.class,
-                () -> authService.login(validAuthenticateDto)
+                () -> authService.login(validAuthDto)
         );
 
         assertEquals("User not found", exception.getMessage());
-        verify(userRepository, times(1)).findByEmail(validAuthenticateDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(validAuthDto.getEmail());
         verifyNoInteractions(encoder);
         verifyNoInteractions(jwtUtil);
     }
@@ -89,20 +89,20 @@ class AuthServiceImplTest {
     @Test
     @DisplayName("Should throw BadCredentialsException when password is invalid")
     void login_InvalidPassword_ThrowsException() {
-        when(userRepository.findByEmail(invalidPasswordAuthenticateDto.getEmail()))
+        when(userRepository.findByEmail(invalidPasswordAuthDto.getEmail()))
                 .thenReturn(java.util.Optional.of(validUser));
-        when(encoder.matches(invalidPasswordAuthenticateDto.getPassword(), validUser.getPassword()))
+        when(encoder.matches(invalidPasswordAuthDto.getPassword(), validUser.getPassword()))
                 .thenReturn(false);
 
         BadCredentialsException exception = assertThrows(
                 BadCredentialsException.class,
-                () -> authService.login(invalidPasswordAuthenticateDto)
+                () -> authService.login(invalidPasswordAuthDto)
         );
 
         assertEquals("Invalid password", exception.getMessage());
-        verify(userRepository, times(1)).findByEmail(invalidPasswordAuthenticateDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(invalidPasswordAuthDto.getEmail());
         verify(encoder, times(1))
-                .matches(invalidPasswordAuthenticateDto.getPassword(), validUser.getPassword());
+                .matches(invalidPasswordAuthDto.getPassword(), validUser.getPassword());
         verifyNoInteractions(jwtUtil);
     }
 }

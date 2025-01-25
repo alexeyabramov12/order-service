@@ -1,8 +1,8 @@
 package com.example.orderservice.presentation.controller;
 
 import com.example.orderservice.application.service.AuthService;
-import com.example.orderservice.presentation.dto.auth.AuthenticateDto;
-import com.example.orderservice.presentation.dto.auth.AuthenticateResponseDto;
+import com.example.orderservice.presentation.dto.auth.AuthDto;
+import com.example.orderservice.presentation.dto.auth.AuthResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -46,39 +46,39 @@ class AuthControllerTest {
 
     private ObjectWriter ow;
 
-    private AuthenticateDto validAuthenticateDto;
-    private AuthenticateResponseDto validResponseDto;
+    private AuthDto validAuthDto;
+    private AuthResponseDto validResponseDto;
 
     @BeforeEach
     void setUp() {
         ow = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false).writer().withDefaultPrettyPrinter();
 
-        validAuthenticateDto = new AuthenticateDto("user@example.com", "password123");
-        validResponseDto = new AuthenticateResponseDto("mocked-jwt-token");
+        validAuthDto = new AuthDto("user@example.com", "password123");
+        validResponseDto = new AuthResponseDto("mocked-jwt-token");
     }
 
     @Test
     @DisplayName("Should return JWT token when login is successful")
     void login_Success_ReturnsToken() throws Exception {
-        ArgumentCaptor<AuthenticateDto> captor = ArgumentCaptor.forClass(AuthenticateDto.class);
-        when(authService.login(Mockito.any(AuthenticateDto.class))).thenReturn(validResponseDto);
+        ArgumentCaptor<AuthDto> captor = ArgumentCaptor.forClass(AuthDto.class);
+        when(authService.login(Mockito.any(AuthDto.class))).thenReturn(validResponseDto);
 
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ow.writeValueAsString(validAuthenticateDto)))
+                        .content(ow.writeValueAsString(validAuthDto)))
                 .andExpect(status().isOk());
 
         verify(authService, times(1)).login(captor.capture());
-        AuthenticateDto capturedDto = captor.getValue();
-        assertEquals(validAuthenticateDto.getEmail(), capturedDto.getEmail());
-        assertEquals(validAuthenticateDto.getPassword(), capturedDto.getPassword());
+        AuthDto capturedDto = captor.getValue();
+        assertEquals(validAuthDto.getEmail(), capturedDto.getEmail());
+        assertEquals(validAuthDto.getPassword(), capturedDto.getPassword());
     }
 
 
     @Test
     @DisplayName("Should return 400 when input data is invalid")
     void login_InvalidInput_ReturnsBadRequest() throws Exception {
-        AuthenticateDto invalidDto = new AuthenticateDto("", "");
+        AuthDto invalidDto = new AuthDto("", "");
 
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +96,7 @@ class AuthControllerTest {
         mockMvc.perform(post("/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ow.writeValueAsString(validAuthenticateDto)))
+                        .content(ow.writeValueAsString(validAuthDto)))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error").value("Invalid credentials"));
     }

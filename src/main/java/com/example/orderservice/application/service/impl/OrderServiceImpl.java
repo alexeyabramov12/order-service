@@ -4,7 +4,7 @@ import com.example.orderservice.application.event.OrderStatusChangedEvent;
 import com.example.orderservice.application.service.OrderService;
 import com.example.orderservice.domain.order.Order;
 import com.example.orderservice.domain.order.OrderStatus;
-import com.example.orderservice.infrastructure.audit.anatation.Auditable;
+import com.example.orderservice.infrastructure.audit.annotation.Auditable;
 import com.example.orderservice.infrastructure.config.security.UserContextHelper;
 import com.example.orderservice.infrastructure.mapper.OrderMapper;
 import com.example.orderservice.infrastructure.repository.OrderRepository;

@@ -1,7 +1,7 @@
 package com.example.orderservice.presentation.controller;
 
-import com.example.orderservice.presentation.dto.auth.AuthenticateDto;
-import com.example.orderservice.presentation.dto.auth.AuthenticateResponseDto;
+import com.example.orderservice.presentation.dto.auth.AuthDto;
+import com.example.orderservice.presentation.dto.auth.AuthResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,5 +22,5 @@ public interface AuthControllerApi {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/login")
-    ResponseEntity<AuthenticateResponseDto> login(@Valid @RequestBody AuthenticateDto authenticateDto);
+    ResponseEntity<AuthResponseDto> login(@Valid @RequestBody AuthDto authDto);
 }

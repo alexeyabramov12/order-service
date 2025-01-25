@@ -2,7 +2,7 @@ package com.example.orderservice.infrastructure.audit.aspect;
 
 import com.example.orderservice.domain.audit.Audit;
 import com.example.orderservice.infrastructure.audit.AuditHandler;
-import com.example.orderservice.infrastructure.audit.anatation.Auditable;
+import com.example.orderservice.infrastructure.audit.annotation.Auditable;
 import com.example.orderservice.infrastructure.config.security.UserContextHelper;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;

@@ -1,7 +1,7 @@
 package com.example.orderservice.application.service;
 
-import com.example.orderservice.presentation.dto.auth.AuthenticateDto;
-import com.example.orderservice.presentation.dto.auth.AuthenticateResponseDto;
+import com.example.orderservice.presentation.dto.auth.AuthDto;
+import com.example.orderservice.presentation.dto.auth.AuthResponseDto;
 
 /**
  * Service interface for handling authentication-related operations.
@@ -13,10 +13,10 @@ public interface AuthService {
     /**
      * Authenticates a user based on the provided credentials and generates an authentication token.
      *
-     * @param authenticateDto the {@link AuthenticateDto} object containing the user's email and password.
-     * @return an {@link AuthenticateResponseDto} object containing the generated authentication token and other user-related information.
+     * @param authDto the {@link AuthDto} object containing the user's email and password.
+     * @return an {@link AuthResponseDto} object containing the generated authentication token and other user-related information.
      * @throws org.springframework.security.authentication.BadCredentialsException if the provided credentials are invalid.
      * @throws org.springframework.security.core.userdetails.UsernameNotFoundException if the user with the provided email does not exist.
      */
-    AuthenticateResponseDto login(AuthenticateDto authenticateDto);
+    AuthResponseDto login(AuthDto authDto);
 }
