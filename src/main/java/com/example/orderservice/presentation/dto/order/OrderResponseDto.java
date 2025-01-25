@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -31,7 +30,7 @@ public class OrderResponseDto {
 
     @Schema(description = "The total price of the order",
             example = "199.99")
-    private BigDecimal totalPrice;
+    private Double totalPrice;
 
     @Schema(description = "The list of products in the order")
     private List<ProductResponseDto> products;
