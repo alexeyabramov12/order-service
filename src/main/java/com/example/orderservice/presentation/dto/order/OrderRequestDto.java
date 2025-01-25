@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -38,7 +37,7 @@ public class OrderRequestDto {
             example = "199.99",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "Total price must not be null")
-    private BigDecimal totalPrice;
+    private Double totalPrice;
 
     @Schema(description = "The list of products in the order",
             requiredMode = Schema.RequiredMode.REQUIRED)
