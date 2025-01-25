@@ -39,11 +39,21 @@ public class MetricsFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse httpResponse) {
+        if (request instanceof HttpServletRequest httpRequest &&
+                response instanceof HttpServletResponse httpResponse) {
+
+            // Игнорируем метрики для эндпоинта /metrics
+            String requestURI = httpRequest.getRequestURI();
+            if ("/metrics".equals(requestURI)) {
+                chain.doFilter(request, response);
+                return;
+            }
+
             apiMetricsService.incrementTotalRequests();
 
             try {
                 chain.doFilter(request, response);
+
                 if (httpResponse.getStatus() >= 200 && httpResponse.getStatus() < 400) {
                     apiMetricsService.incrementSuccessfulRequests();
                 } else {
