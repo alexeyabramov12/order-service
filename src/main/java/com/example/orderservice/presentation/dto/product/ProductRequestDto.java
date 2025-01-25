@@ -16,6 +16,11 @@ import lombok.Setter;
 @Schema(description = "DTO for representing a product in an order request")
 public class ProductRequestDto {
 
+    @Schema(description = "The unique ID of the product",
+            example = "1")
+    @Min(value = 0, message = "Id must be at least 0")
+    private Long id;
+
     @Schema(description = "The name of the product",
             example = "Laptop",
             requiredMode = Schema.RequiredMode.REQUIRED)

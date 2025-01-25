@@ -44,7 +44,6 @@ public interface OrderMapper {
      * @param productRequestDto the {@link ProductRequestDto} to convert.
      * @return the converted {@link Product} entity.
      */
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "isDeleted", constant = "false")
     Product toEntity(ProductRequestDto productRequestDto);
 
