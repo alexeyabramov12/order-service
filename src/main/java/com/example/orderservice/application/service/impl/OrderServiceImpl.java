@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = repository.findByIdAndNotDeleted(orderId)
                 .filter(o -> o.getCustomerName().equals(currentUserEmail) || userContextHelper.isAdmin())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Order with ID %d not found or access denied", orderId)
+                        String.format("Order with ID %d not found or you do not have access rights", orderId)
                 ));
         return mapper.toDto(order);
     }
