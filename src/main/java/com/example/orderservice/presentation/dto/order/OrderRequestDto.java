@@ -35,7 +35,6 @@ public class OrderRequestDto {
 
     @Schema(description = "The total price of the order",
             example = "199.99")
-    @NotNull(message = "Total price must not be null")
     private Double totalPrice;
 
     @Schema(description = "The list of products in the order",
