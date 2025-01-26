@@ -8,6 +8,7 @@ import com.example.orderservice.infrastructure.mapper.OrderMapper;
 import com.example.orderservice.infrastructure.repository.OrderRepository;
 import com.example.orderservice.presentation.dto.order.OrderRequestDto;
 import com.example.orderservice.presentation.dto.order.OrderResponseDto;
+import com.example.orderservice.presentation.dto.product.ProductRequestDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,8 +64,13 @@ class OrderServiceImplTest {
         mockOrder.setStatus(OrderStatus.PENDING);
 
         mockOrderRequestDto = new OrderRequestDto();
+        mockOrderRequestDto.setProducts(Collections.singletonList(
+                new ProductRequestDto(1L, "Product 1", 100.0, 2)
+        ));
+
         mockOrderResponseDto = new OrderResponseDto();
     }
+
 
     @Test
     @DisplayName("Should create a new order and return response DTO")
@@ -207,5 +213,40 @@ class OrderServiceImplTest {
         orderService.updateOrder(1L, mockOrderRequestDto);
 
         verify(eventPublisher).publishEvent(any(OrderStatusChangedEvent.class));
+    }
+
+    @Test
+    @DisplayName("Should calculate totalPrice when it is not provided in the request")
+    void createOrder_TotalPriceNotProvided_CalculatesTotalPrice() {
+        mockOrderRequestDto.setProducts(List.of(
+                new ProductRequestDto(1L, "Product 1", 50.0, 2),
+                new ProductRequestDto(2L, "Product 2", 25.0, 1)
+        ));
+        mockOrderRequestDto.setTotalPrice(null);
+
+        Order savedOrder = new Order();
+        savedOrder.setId(1L);
+        savedOrder.setCustomerName(mockOrderRequestDto.getCustomerName());
+        savedOrder.setStatus(OrderStatus.PENDING);
+
+        when(mapper.toEntity(any(OrderRequestDto.class))).thenAnswer(invocation -> {
+            OrderRequestDto requestDto = invocation.getArgument(0);
+            Order order = new Order();
+            order.setCustomerName(requestDto.getCustomerName());
+            order.setStatus(OrderStatus.PENDING);
+            order.setTotalPrice(requestDto.getTotalPrice());
+            return order;
+        });
+
+        when(repository.save(any(Order.class))).thenReturn(savedOrder);
+        when(mapper.toDto(any(Order.class))).thenReturn(mockOrderResponseDto);
+
+        OrderResponseDto result = orderService.createOrder(mockOrderRequestDto);
+
+        assertNotNull(result);
+        verify(repository).save(any(Order.class));
+        verify(mapper).toDto(any(Order.class));
+
+        assertEquals(125.0, mockOrderRequestDto.getTotalPrice(), "The calculated totalPrice should be 125.0");
     }
 }

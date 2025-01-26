@@ -34,8 +34,7 @@ public class OrderRequestDto {
     private String status;
 
     @Schema(description = "The total price of the order",
-            example = "199.99",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            example = "199.99")
     @NotNull(message = "Total price must not be null")
     private Double totalPrice;
 

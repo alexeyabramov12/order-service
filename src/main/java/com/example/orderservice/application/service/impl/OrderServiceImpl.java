@@ -35,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
     @Auditable(action = "Create order")
     @CacheEvict(value = "orders", allEntries = true)
     public OrderResponseDto createOrder(OrderRequestDto orderRequest) {
+        setTotalPriceIfAbsent(orderRequest);
         return mapper.toDto(repository.save(mapper.toEntity(orderRequest)));
     }
 
@@ -49,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Order with ID %d not found or access denied", orderId)
                 ));
+
+        setTotalPriceIfAbsent(orderRequest);
 
         Order updatedOrder = mapper.toEntity(orderRequest);
         updatedOrder.setId(existingOrder.getId());
@@ -124,5 +127,19 @@ public class OrderServiceImpl implements OrderService {
         order.getProducts().forEach(p -> p.setIsDeleted(true));
 
         repository.save(order);
+    }
+
+    /**
+     * Sets total price in the order request if it is not provided.
+     *
+     * @param orderRequest the order request DTO
+     */
+    private void setTotalPriceIfAbsent(OrderRequestDto orderRequest) {
+        if (orderRequest.getTotalPrice() == null) {
+            double calculatedTotalPrice = orderRequest.getProducts().stream()
+                    .mapToDouble(product -> product.getPrice() * product.getQuantity())
+                    .sum();
+            orderRequest.setTotalPrice(calculatedTotalPrice);
+        }
     }
 }
