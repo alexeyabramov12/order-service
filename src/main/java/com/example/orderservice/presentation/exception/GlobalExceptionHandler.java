@@ -1,6 +1,7 @@
 package com.example.orderservice.presentation.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -89,6 +90,20 @@ public class GlobalExceptionHandler {
         errorResponse.put("error", "Invalid parameter");
         errorResponse.put("details", String.format("Parameter '%s' is invalid.", ex.getName()));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles {@link DataAccessException} when there is a database error, such as failing to save data.
+     *
+     * @param ex the exception thrown
+     * @return a {@link ResponseEntity} with error message and {@link HttpStatus#INTERNAL_SERVER_ERROR}
+     */
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<Map<String, String>> handleDataAccessException(DataAccessException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Database error");
+        errorResponse.put("details", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
