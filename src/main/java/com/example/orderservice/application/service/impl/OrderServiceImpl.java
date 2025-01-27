@@ -13,7 +13,6 @@ import com.example.orderservice.presentation.dto.order.OrderResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     @Auditable(action = "Update order")
-    @CachePut(value = "orders", key = "#orderId")
+    @CacheEvict(value = "orders", allEntries = true)
     public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequest) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
         Order existingOrder = repository.findByIdAndNotDeleted(orderId)
@@ -75,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Auditable(action = "Get order by id")
     @Transactional
-    @CacheEvict(value = "orders", allEntries = true)
+    @Cacheable(value = "orders", key = "#orderId")
     public OrderResponseDto getOrderById(Long orderId) {
         String currentUserEmail = userContextHelper.getCurrentUserEmail();
         Order order = repository.findByIdAndNotDeleted(orderId)
